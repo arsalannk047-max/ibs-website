@@ -1,8 +1,8 @@
-import Navbar from '../../app/components/Navbar';
-import Hero from '../../app/components/Hero';
-import Courses from '../../app/components/Courses';
-import Contact from '../../app/components/Contact';
-import Footer from '../../app/components/Footer';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import Courses from '../components/Courses';
+import Contact from '../components/Contact';
+import Footer from '../components/Footer';
 
 export default function Home() {
   return (
