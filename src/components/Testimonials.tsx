@@ -1,78 +1,32 @@
-'use client';
-
-import React from 'react';
+﻿'use client';
 import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-const testimonialsData = [
-  {
-    id: 1,
-    name: 'Ahmed Khan',
-    program: 'Commerce Graduate',
-    quote: 'IBS provided me with the foundational knowledge and practical skills needed to excel in the commerce field. The faculty's guidance was invaluable.',
-    image: '/images/testimonials/ahmed-khan.jpg'
-  },
-  {
-    id: 2,
-    name: 'Fatima Ali',
-    program: 'Computer Science Student',
-    quote: 'The computer science program at IBS is outstanding. The curriculum is up-to-date, and the professors are highly knowledgeable. It has prepared me well for my future career.',
-    image: '/images/testimonials/fatima-ali.jpg'
-  },
-  {
-    id: 3,
-    name: 'Usman Qureshi',
-    program: 'Digital Marketing Course Alumnus',
-    quote: 'The digital marketing course at IBS was a game-changer for my career. I gained practical skills and confidence to launch my own online business.',
-    image: '/images/testimonials/usman-qureshi.jpg'
-  },
+const testimonials = [
+  { name: "Ahmed Ali", text: "IBS ne meri zindagi badal di — matric mein A+ aaya!", grade: "Matric Student" },
+  { name: "Sara Khan", text: "Best teachers and study environment in Karachi.", grade: "Intermediate Student" },
+  { name: "Usman Malik", text: "Fee structure bohot reasonable hai aur results excellent.", grade: "Parent" },
 ];
 
 const Testimonials = () => {
   return (
-    <section id="testimonials" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-blue-800 mb-4">Student Testimonials</h2>
-          <p className="text-xl text-gray-700">Hear from our successful students.</p>
+    <section className="py-16 px-4 bg-blue-50">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-blue-900 mb-10">What Students Say</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="bg-white rounded-xl shadow p-6 border border-blue-100"
+            >
+              <p className="text-gray-600 mb-4 italic">"{t.text}"</p>
+              <p className="font-bold text-blue-800">{t.name}</p>
+              <p className="text-sm text-gray-500">{t.grade}</p>
+            </motion.div>
+          ))}
         </div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <Swiper
-            modules={[Pagination, Autoplay]}
-            spaceBetween={30}
-            slidesPerView={1}
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            breakpoints={{
-              640: { slidesPerView: 1 },
-              768: { slidesPerView: 1 },
-              1024: { slidesPerView: 1 },
-            }}
-            className="mySwiper"
-          >
-            {testimonialsData.map((testimonial) => (
-              <SwiperSlide key={testimonial.id}>
-                <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8 md:p-12 flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8">
-                  <img src={testimonial.image} alt={testimonial.name} className="w-32 h-32 rounded-full object-cover mx-auto md:mx-0 border-4 border-green-500" />
-                  <div className="text-center md:text-left">
-                    <p className="text-lg md:text-xl text-gray-800 italic mb-4">{testimonial.quote}</p>
-                    <h4 className="text-2xl font-bold text-blue-900 mb-1">{testimonial.name}</h4>
-                    <p className="text-md text-gray-600">{testimonial.program}</p>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </motion.div>
       </div>
     </section>
   );
