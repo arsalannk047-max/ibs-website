@@ -1,10 +1,46 @@
 'use client';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MapPin, Send, Clock } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Clock, CheckCircle2 } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 export default function ContactPage() {
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [classInterest, setClassInterest] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async () => {
+    if (!name || !phone || !message) {
+      setStatus('error');
+      return;
+    }
+
+    setStatus('sending');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, classInterest, message }),
+      });
+
+      if (res.ok) {
+        setStatus('success');
+        setName('');
+        setPhone('');
+        setClassInterest('');
+        setMessage('');
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
   return (
     <main>
       <Navbar />
@@ -96,15 +132,23 @@ export default function ContactPage() {
               <input
                 type="text"
                 placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-green-600"
               />
               <input
                 type="tel"
                 placeholder="Phone Number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-green-600"
               />
-              <select className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-green-600 text-gray-500">
-                <option>Select Class / Interest</option>
+              <select
+                value={classInterest}
+                onChange={(e) => setClassInterest(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-green-600 text-gray-500"
+              >
+                <option value="">Select Class / Interest</option>
                 <option>Class IX</option>
                 <option>Class X</option>
                 <option>Class XI</option>
@@ -114,10 +158,29 @@ export default function ContactPage() {
               <textarea
                 placeholder="Your Message"
                 rows={4}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-green-600"
               />
-              <button className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition-colors flex items-center justify-center gap-2">
-                Send Message <Send size={18} />
+
+              {status === 'success' && (
+                <div className="flex items-center gap-2 text-green-700 bg-green-50 p-3 rounded-xl text-sm">
+                  <CheckCircle2 size={18} />
+                  Message sent successfully! We&apos;ll get back to you soon.
+                </div>
+              )}
+              {status === 'error' && (
+                <div className="text-red-600 bg-red-50 p-3 rounded-xl text-sm">
+                  Please fill all required fields and try again.
+                </div>
+              )}
+
+              <button
+                onClick={handleSubmit}
+                disabled={status === 'sending'}
+                className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {status === 'sending' ? 'Sending...' : 'Send Message'} <Send size={18} />
               </button>
             </div>
           </motion.div>
